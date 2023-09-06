@@ -1,4 +1,3 @@
-
 redact_url: &redact_url http://redact:8787
 
 elements:
