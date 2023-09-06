@@ -1,0 +1,64 @@
+
+redact_url: &redact_url http://redact:8787
+
+elements:
+  # searches for *.mp4 file (only one!), checks redact availability
+  - name: "Validator"
+    inputs:
+      directory_data_video: ./data/input/
+      redact_url: *redact_url
+
+  # extracts frames from the video - FFMPEG
+  - name: "DataReader"
+    settings:
+      frame_file_name_format: "%08d"
+
+    inputs:
+      directory_data_video: ./data/input/
+
+    outputs:
+      directory_extracted_frames: ./data/extracted_frames
+      video_metadata: IN_MEMORY_VARIABLE
+
+  # packs frames into tar-archives by 100 in each
+  - name: "TarArchiver"
+    settings:
+      number_of_files_in_tar: 100
+
+    inputs:
+      directory_extracted_frames: ./data/extracted_frames
+
+    outputs:
+      tar_files_directory: ./data/tar_files
+
+  - name: "Redactor"
+    settings:
+      redact_url: *redact_url
+      face_determination_threshold: null
+      lp_determination_threshold: null
+
+    inputs:
+      tar_files_directory: ./data/tar_files
+
+    outputs:
+      anonymized_tar_files_directory: ./data/anonymized_tar_files
+
+  # extracts frames from tar-archives
+  - name: "TarExtractor"
+    inputs:
+      anonymized_tar_files_directory: ./data/anonymized_tar_files
+
+    outputs:
+      directory_anonymized_frames: ./data/anonymized_frames
+
+  # combines anonymized frames into video - FFMPEG
+  - name: "DataWriter"
+    settings:
+      frame_file_name_format: "%08d"
+
+    inputs:
+      directory_anonymized_frames: ./data/anonymized_frames
+      video_metadata: IN_MEMORY_VARIABLE
+
+    outputs:
+      directory_anonymized_data_video: ./data/output/
