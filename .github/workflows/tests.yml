@@ -1,0 +1,21 @@
+name: Test
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out source repository
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      - name: build container
+        run: docker build --file ./deployment/Dockerfile --target testing --tag my-container .
+
+      - name: test
+        run: docker run -t my-container pytest --cov=./src --cov-branch -v -p no:cacheprovider --cov-report term-missing ./src/ ./tests/
+
+      - name: test mp4 example
+        run: docker run -t my-container pytest --cov=./example/mp4_data_converter/integration_pipeline --cov=./example/mp4_data_converter/utils --cov-branch -v -p no:cacheprovider --cov-report term-missing ./example/mp4_data_converter/integration_pipeline ./example/mp4_data_converter/utils ./example/mp4_data_converter/tests/

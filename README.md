@@ -21,34 +21,49 @@ Please be aware that a git lfs install is required for cloning with all dependen
 
 ### Building and running
 
-Custom integration platform works in the docker environment, in order to build the container locally use [`build.sh`](deployment/build.sh) or run the following command:
-
+Custom integration platform works in the docker environment, in order to build the container locally use [`build.sh`](deployment/build.sh)
+```shell
+bash build.sh -t production
+```
+or run the following command
 ```shell
 docker build --target production --progress plain -f ./deployment/Dockerfile -t custom_integration_platform .
 ```
+for production build.
+
 Then replace the Redact URL in the pipeline definition file ([here](example/mp4_data_converter/integration_pipeline/pipeline_definition.yml#L6) and [here](example/mp4_data_converter/integration_pipeline/pipeline_definition.yml#L33)) with an already working Redact's URL , e.g.
 
 ```yaml
 redact_url: http://192.168.0.1:1234/
 ```
 A [sample video](example/mp4_data_converter/tests/assets/original_video/test_video.mp4) could be used for anonymization tests and the [example integration pipeline](example) for a reference.
-To launch the example run the following command:
+To launch the example you need to build a test image using the following command:
+```shell
+bash build.sh -t testing
+```
+or
+```shell
+docker build --target testing --progress plain -f ./deployment/Dockerfile -t custom_integration_platform .
+```
+and running:
 
 ```shell
 docker run \
 -v <INPUT_DIRECTORY>:/root/custom_integration_platform/data/input/ \
 -v <OUTPUT_DIRECTORY>:/root/custom_integration_platform/data/output/ \
 -v <LOGS_DIRECTORY>:/root/custom_integration_platform/logs/ \
-custom_integration_platform
+custom_integration_platform:<TAG> \
+python3.10 src/main.py
 ```
-where ```INPUT_DIRECTORY```, ```OUTPUT_DIRECTORY```, ```LOGS_DIRECTORY``` need to be replaced with user directories. To modify the pipeline or to create a custom one please refer to our [developer guide](#developer-guide).
+
+where ```INPUT_DIRECTORY```, ```OUTPUT_DIRECTORY```, ```LOGS_DIRECTORY``` need to be replaced with host system directories' absolute paths. To modify the pipeline or to create a custom one please refer to our [developer guide](#developer-guide). The ```TAG``` is the version from the [build.info](deployment/build.info) file.
 ## General dataflow
 
 ### Orchestrator
 The main core component of custom integration platform is [Orchestrator](src/orchestrator/orchestrator.py) - a high-level "pipeline builder and executor", which helps to abstract all element-specific operations. It initializes elements by passing settings from pipeline definition file, and runs each element according to its input and/or output directories (which are also specified in pipeline definition file).
 
 <p align="center">
-  <img src="docs/custom-integration-platform-overview.png" />
+  <img src="docs/custom_integration_platform-overview.png" />
 </p>
 
 ### Pipeline elements

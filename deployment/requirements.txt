@@ -1,0 +1,14 @@
+git+https://github.com/brighter-ai/redact-client.git@v6.3.0#egg=redact
+
+black==23.3.0
+flake8==6.0.0
+httpx==0.23.3
+isort==5.12.0
+logfmter==0.0.6
+pydantic==1.10.7
+pytest==7.3.1
+pytest-cov==4.0.0
+pytest-mock==3.10.0
+pyaml==21.10.1
+retry2==0.9.5
+strenum==0.4.10

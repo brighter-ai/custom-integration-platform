@@ -1,0 +1,28 @@
+name: Lint
+on: [pull_request]
+jobs:
+  code_style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out source repository
+        uses: actions/checkout@v3
+
+      - name: set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: isort
+        uses: isort/isort-action@master
+        with:
+          configuration: --check-only --diff --profile black -l=119
+
+      - name: black
+        uses: psf/black@stable
+        with:
+          options: --line-length 119
+
+      - name: flake8
+        uses: py-actions/flake8@v2
+        with:
+          max-line-length: 119

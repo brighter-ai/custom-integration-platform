@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  custom-integration-platform:
+    build:
+      dockerfile: deployment/Dockerfile
+      target: development
+      context: ../
+      args:
+        DEV_USER: ${DEV_USER:?DEV_USER required}
+        DEV_USER_ID: ${DEV_USER_ID:?DEV_USER_ID required}
+        DEV_PASSWORD: ${DEV_PASSWORD:?DEV_PASSWORD required}
+    environment:
+      LOG_LEVEL: INFO
+    image: ${COMPOSE_PROJECT_NAME:?COMPOSE_PROJECT_NAME required}_dev
+    container_name: ${COMPOSE_PROJECT_NAME:?COMPOSE_PROJECT_NAME required}_dev
+    tty: true
+    ports:
+      - '${DEV_SSH_PORT:?DEV_SSH_PORT required}:22'   # SSH port
+    volumes:
+     - '${DEV_REMOTE_PATH}:/home/${DEV_USER}/custom_integration_platform'
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10M"
+        max-file: "5"
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"

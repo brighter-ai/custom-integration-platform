@@ -1,0 +1,13 @@
+*/*/__pycache__*
+*/*/.pytest_cache*
+*/*/README.md*
+*.git*
+*scripts*
+
+*venv*
+*pytest_cache*
+/build
+cmake-build
+__pycache__
+*.pyc
+*.pyo
