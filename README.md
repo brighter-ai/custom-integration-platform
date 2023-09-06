@@ -23,15 +23,15 @@ Please be aware that a git lfs install is required for cloning with all dependen
 
 Custom integration platform works in the docker environment, in order to build the container locally use [`build.sh`](deployment/build.sh)
 ```shell
-bash build.sh -t production
+cd deployment && bash build.sh -t production
 ```
 or run the following command
 ```shell
-docker build --target production --progress plain -f ./deployment/Dockerfile -t custom_integration_platform .
+cd deployment && docker build --target production --progress plain -f ./deployment/Dockerfile -t custom_integration_platform .
 ```
 for production build.
 
-Then replace the Redact URL in the pipeline definition file ([here](example/mp4_data_converter/integration_pipeline/pipeline_definition.yml#L6) and [here](example/mp4_data_converter/integration_pipeline/pipeline_definition.yml#L33)) with an already working Redact's URL , e.g.
+Then replace the Redact URL YAML variable in the pipeline definition file ([here](example/mp4_data_converter/integration_pipeline/pipeline_definition.yml#L1)) with an already working Redact's URL , e.g.
 
 ```yaml
 redact_url: http://192.168.0.1:1234/
@@ -39,11 +39,11 @@ redact_url: http://192.168.0.1:1234/
 A [sample video](example/mp4_data_converter/tests/assets/original_video/test_video.mp4) could be used for anonymization tests and the [example integration pipeline](example) for a reference.
 To launch the example you need to build a test image using the following command:
 ```shell
-bash build.sh -t testing
+cd deployment && bash build.sh -t testing
 ```
 or
 ```shell
-docker build --target testing --progress plain -f ./deployment/Dockerfile -t custom_integration_platform .
+cd deployment && docker build --target testing --progress plain -f ./deployment/Dockerfile -t custom_integration_platform .
 ```
 and running:
 
