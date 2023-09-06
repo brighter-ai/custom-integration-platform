@@ -63,7 +63,7 @@ where ```INPUT_DIRECTORY```, ```OUTPUT_DIRECTORY```, ```LOGS_DIRECTORY``` need t
 The main core component of custom integration platform is [Orchestrator](src/orchestrator/orchestrator.py) - a high-level "pipeline builder and executor", which helps to abstract all element-specific operations. It initializes elements by passing settings from pipeline definition file, and runs each element according to its input and/or output directories (which are also specified in pipeline definition file).
 
 <p align="center">
-  <img src="docs/custom_integration_platform-overview.png" />
+  <img src="docs/custom_integration_platform_overview.png" />
 </p>
 
 ### Pipeline elements
