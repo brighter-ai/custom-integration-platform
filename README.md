@@ -87,6 +87,10 @@ To build a pipeline, a set of elements needs to be specified in yaml-format in [
 
 
 ## Developer guide
+### Requirements
+* Python 3.10.10
+* Docker
+Check the [requirements.txt](deployment/requirements.txt) for more dependencies. 
 
 There's nothing like seeing the work in practice, so we created an [example solution](example) that shows best practices for using and configuring a custom integration platform. 
 
