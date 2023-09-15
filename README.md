@@ -20,8 +20,18 @@ Custom integration platform enables the creation of data converter applications 
 Please be aware that a git lfs install is required for cloning with all dependencies.
 
 ### Building and running
+Custom integration platform works in the docker environment.
 
-Custom integration platform works in the docker environment, in order to build the container locally use [`build.sh`](deployment/build.sh)
+The pipeline configuration depends on its definition file (for example, [pipeline_definition.yml](example/mp4_data_converter/integration_pipeline/pipeline_definition.yml)).
+All required configurations must be updated within it, before building a docker container.
+For instance redact URL, must be set using a YAML [variable](example/mp4_data_converter/integration_pipeline/pipeline_definition.yml#L1). 
+It must be an already working Redact's URL, e.g.
+
+```yaml
+redact_url: http://192.168.0.1:1234/
+```
+
+In order to build the container locally use [`build.sh`](deployment/build.sh)
 ```shell
 cd deployment && bash build.sh -t production
 ```
@@ -30,12 +40,6 @@ or run the following command
 cd deployment && docker build --target production --progress plain -f ./deployment/Dockerfile -t custom_integration_platform .
 ```
 for production build.
-
-Then replace the Redact URL YAML variable in the pipeline definition file ([here](example/mp4_data_converter/integration_pipeline/pipeline_definition.yml#L1)) with an already working Redact's URL , e.g.
-
-```yaml
-redact_url: http://192.168.0.1:1234/
-```
 A [sample video](example/mp4_data_converter/tests/assets/original_video/test_video.mp4) could be used for anonymization tests and the [example integration pipeline](example) for a reference.
 To launch the example you need to build a test image using the following command:
 ```shell
